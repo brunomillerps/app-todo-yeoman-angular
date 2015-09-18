@@ -1,0 +1,56 @@
+<div class="container">
+  <h2>Minhas tarefas</h2>
+
+  <form role="form" name="taskForm" ng-submit="addTarefa(taskForm.$invalid)" novalidate>
+    <div class="row">
+      <div class="input-group">
+        <div class="form-group" ng-class="{ 'has-error' : taskForm.nome.$invalid && taskForm.nome.$dirty}">
+          <label for="nome">Nome Resumido</label>
+          <input type="text" name="nome" ng-model="tarefa.nome" ng-required ng-minlength="3" ng-maxlength="10" placeholder="Nome resumido da sua tarefa" class="form-control">
+          <p ng-show="taskForm.nome.$invalid && taskForm.nome.$dirty" class="help-block">Nome resumido é obrigatorio.</p>
+          <p ng-show="taskForm.nome.$error.minlength" class="help-block">Nome é muito curto.</p>
+          <p ng-show="taskForm.nome.$error.maxlength" class="help-block">Nome é muito grande.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="descricao">Descrição detalhada</label>
+          <input type="textarea" name="descricao" ng-model="tarefa.descricao" placeholder="Descreve o que precisa ser concluído?" class="form-control">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Adicionar" ng-disabled="taskForm.$invalid">
+      </div>
+    </div>
+  </form>
+
+  <!-- Todo list --><!--
+  <div ui-sortable ng-model="tarefas">
+    <p class="input-group" ng-repeat="tarefa in tarefas track by $index" style="padding:5px 10px; cursor: move;">
+      <input type="text" ng-model="tarefa.nome" class="form-control" >
+      <span class="input-group-btn">
+        <button class="btn btn-danger" ng-click="removeTarefa($index)" arial-label="Remove">X</button>
+      </span>
+    </p>
+  </div> -->
+
+  <hr/>
+  <div id="todo-list" class="list-group">
+    Eu tenho {{tarefas.length}} tarefas. São elas:
+    <input type="search" ng-model="search.$" placeholder="Filtrar tarefas..." />
+    <br>
+    <br>
+    <div ng-repeat="tarefa in tarefas | filter:search:strict as results">
+      <a class="list-group-item col-xs-8 {{tarefa.active}}" ng-click="activeted($index)">
+        <h4 class="list-group-item-heading completed-{{tarefa.completed}}">{{tarefa.nome}}</h4>
+        <p class="list-group-item-text completed-{{tarefa.completed}}">{{tarefa.descricao}}</p>
+      </a>
+      <span class="group-btn col-xs-2">
+        <button class="btn btn-success glyphicon glyphicon-thumbs-{{tarefa.thumbs}}" ng-click="concluirTarefa($index)" ></button>
+        <button class="btn btn-danger glyphicon glyphicon-remove" ng-click="removeTarefa($index)"></button>
+      </span>
+    </div>
+    <div ng-if="results.length == 0">
+      <strong>Nenhuma tarefa foi encontrada...</strong>
+    </div>
+  </div>
+</div>
+<br>
+<br>
